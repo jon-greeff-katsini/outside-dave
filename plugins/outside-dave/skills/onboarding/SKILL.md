@@ -67,7 +67,7 @@ Use Mermaid for the diagrams so they render on the git host. Keep them at a high
 
 - Determine what tests exist across the testing pyramid:
   - unit tests, and how to run them
-  - integration tests, and how to run them
+  - integration tests, and how to run them, this should include how to virtualize external dependencies
 
 Understanding how to verify a feature the way a user would matters just as much. A developer would typically also test functionally, so work out how to functionally test the product.
 
