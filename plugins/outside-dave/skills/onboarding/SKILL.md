@@ -96,7 +96,7 @@ These are the files the sections above record their findings in. Together they a
 
 ## Updating agents
 
-Create every file this skill says information should live in. The user might prefer this information somewhere else, and that's fine; if a location doesn't exist, ask them where it should go.
+By default, create every file this skill names, at the location it names. If the user tells you they want the information somewhere else, record it there instead and treat that location as the source of truth for the rest of this work.
 
 Update `AGENTS.md` or `CLAUDE.md` with references to these files and when each should be loaded. References only, not the content itself: `CLAUDE.md` should always stay light.
 
