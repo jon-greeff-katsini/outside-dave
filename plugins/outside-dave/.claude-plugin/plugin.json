@@ -1,0 +1,9 @@
+{
+  "name": "outside-dave",
+  "description": "Prepares a repository for agentic development: onboarding docs an outside developer, or an agent, can work from without asking questions.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Jon Myburgh",
+    "email": "jon@greeff-katsini.co.za"
+  }
+}

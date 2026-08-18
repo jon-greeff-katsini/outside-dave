@@ -1,0 +1,15 @@
+{
+  "name": "outside-dave",
+  "description": "Plugins for agentic development workflows, starting with repository onboarding.",
+  "owner": {
+    "name": "Jon Myburgh",
+    "email": "jon@greeff-katsini.co.za"
+  },
+  "plugins": [
+    {
+      "name": "outside-dave",
+      "source": "./plugins/outside-dave",
+      "description": "Prepares a repository for agentic development: onboarding docs an outside developer, or an agent, can work from without asking questions."
+    }
+  ]
+}
