@@ -96,9 +96,19 @@ These are the files the sections above record their findings in. Together they a
 
 ## Updating agents
 
-By default, create every file this skill names, at the location it names. If the user tells you they want the information somewhere else, record it there instead and treat that location as the source of truth for the rest of this work.
+By default, create every file this skill names, at the location it names. If the user wants the information elsewhere, record it there and treat that as the source of truth.
 
-Update `AGENTS.md` or `CLAUDE.md` with references to these files and when each should be loaded. References only, not the content itself: `CLAUDE.md` should always stay light.
+Update `AGENTS.md` or `CLAUDE.md` with references to these files. References only, never the content: `CLAUDE.md` loads into every session, so keep it light.
+
+Each pointer must name the task that makes the doc worth loading, not the doc's topic. An agent reads `CLAUDE.md` before it knows which docs matter, so "architecture documentation" tells it nothing; "before changing code in an unfamiliar area" does. One line per doc, condition first:
+
+- Before writing or changing code: read `docs/CODING-RULES.md`.
+- Before a change in an unfamiliar area, or one that spans components: read `docs/ARCHITECTURE.md`.
+- Before writing tests or verifying a change: read `docs/TESTING.md`.
+- Before branching, committing, or opening a pull request: read `CONTRIBUTING.md`.
+- When setting up, building, running, or debugging: read `README.md`.
+
+Adjust paths and conditions to wherever the information lives. Add any other task-specific docs, such as an API reference or a runbook, in the same form.
 
 ## Verify the onboarding works
 
