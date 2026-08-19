@@ -1,6 +1,6 @@
 ---
 name: planning
-description: "Use whenever entering plan mode or writing an implementation plan: designing how to build a feature, fix a bug, or refactor before touching code. Trigger on any request to plan, design an approach, or propose implementation steps, even if the user never says the word plan. Produces a concise plan with a diagram, a YAGNI check, validation against project rules, and a verification phase."
+description: "Use whenever entering plan mode or writing an implementation plan: designing how to build a feature, fix a bug, or refactor before touching code. Trigger on any request to plan, design an approach, or propose implementation steps, even if the user never says the word plan. Produces a concise plan with a diagram, a YAGNI check, validation against project rules, a subagent review phase, and a verification phase."
 ---
 
 # Planning
@@ -41,8 +41,12 @@ A diagram (see below), plus a sentence or two walking through it.
 1. Ordered, concrete steps. Each names the exact file(s) it touches
    and what changes.
 
+## Review
+Subagent reviews of the finished change (see below).
+
 ## Verification
-How the change will be proven to work (see below).
+How the change will be proven to work (see below), ending with a
+final subagent audit of the entire plan.
 
 ## Documentation
 The docs this change invalidates, and the update each one needs.
@@ -60,6 +64,17 @@ Every plan includes one diagram showing the components the change touches and ho
 
 Write it as a fenced Mermaid block so it renders wherever the plan lands in markdown. Keep it small (five to ten nodes), name nodes after real files, classes, or services, and mark what is new or changed so the delta is visible at a glance. The diagram's job is to show the change, not the whole system.
 
+## The review phase
+
+Once the change is implemented, review it with subagents launched in parallel. A subagent starts with none of the context built up while writing the code, so it reads the diff the way a reviewer would: it can only judge what is actually there. Each reviewer covers one concern:
+
+- **Requirement fit**: does the change actually do what the requirement asks? Give this reviewer the original requirement and the diff, nothing else.
+- **Project conventions**: does the change follow the project's documented rules? Give this reviewer the coding rules and architecture docs alongside the diff.
+- **Simplicity and YAGNI**: code smells, unnecessary abstractions, speculative flexibility, and anything that could be done more simply.
+- **Comments**: over-commented code. Comments that restate the code, narrate the change, or justify it to a reviewer are noise; only comments that carry constraints the code can't show should survive.
+
+Reviewers report findings; they don't fix. Every finding comes back to the main agent to resolve, and changed code goes back through a fresh review. Repeat until the reviews come back clean.
+
 ## The verification phase
 
 Every plan ends with a verification phase covering both kinds of testing:
@@ -68,6 +83,8 @@ Every plan ends with a verification phase covering both kinds of testing:
 - **Functional testing**: the exact steps to run the product, drive the changed behaviour, and what the expected result looks like. "Run the tests" is not functional testing; using the feature is.
 
 If a step can't be verified locally (needs credentials, a deployed environment), say so in the plan.
+
+When verification is done, spawn one final subagent to audit the whole plan. Give it the full plan and access to the repo, and have it check every part off: each step done as written, every review finding resolved, both kinds of verification actually run, every listed doc updated. The agent that did the work is the worst judge of whether it's finished; a fresh context can only trust what it can see in the repo. The auditor reports gaps, the main agent closes them, and the work isn't complete until the audit comes back clean.
 
 ## Keep the docs from rotting
 
