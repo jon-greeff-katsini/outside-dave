@@ -12,6 +12,10 @@ A repository is only as good for agentic development as it is for a junior devel
 
 If an outside developer would need to ask questions about the repository, it is probably not mature enough to be worked on agentically.
 
+## Before you write
+
+Everything this skill produces is prose a person reads. Invoke the `writing` skill with the Skill tool before drafting any of it.
+
 ## Survey what already exists
 
 Before writing anything, take stock of the documentation the repository already has: the README, a CONTRIBUTING file, anything under `docs/`, and any wiki or Confluence pages the repo links to.
@@ -20,9 +24,18 @@ For each file this skill produces, check whether an equivalent already exists. I
 
 ## Standards
 
-Work out what coding standards the repository already has by inspecting its linting rules. If there are no linting rules, flag this to the user and explain why they matter: without them, standards live in people's heads, and neither an outsider nor an agent can follow them.
+Check whether the repository has linting rules. If it has none, flag this to the user and explain why they matter: without them, standards live in people's heads, and neither an outsider nor an agent can follow them.
 
-From the code itself, determine the patterns and rules a contributor is expected to follow. Record these in `docs/CODING-RULES.md`.
+Read the linter config to learn what is already enforced, then keep every bit of it out of `docs/CODING-RULES.md`. Name the config file and move on. A linted rule is enforced on every commit whether or not anyone wrote it down, so a prose copy of it is a second source of truth that goes stale the moment someone edits the config.
+
+What belongs in the file is only what no tool will fail a contributor for: naming conventions, the base classes to inherit, how modules are allowed to depend on each other, the decisions that must be made deliberately rather than by default. Work these out from the code itself and record them in `docs/CODING-RULES.md`.
+
+Two tests before a rule goes in:
+
+- **Could a linter enforce this?** Then it belongs in the linter config. If it should be enforced and isn't, propose the linter rule to the user rather than writing a prose rule nobody runs.
+- **Is it a rule or a description?** "Inherit `ModelBase`" is a rule. "This foreign key cascades because the child is meaningless without its parent" is a fact about today's code, and facts about today's code rot. Write rules, and cite real code as an example of a rule, never in place of one.
+
+Keep tooling and workflow out as well: how to run the formatter, which commands to avoid, how the build behaves. That is `README.md` or `CONTRIBUTING.md`. And where a rule exists only to work around an unfixed problem in the repository, say so and propose the fix instead of making the workaround permanent.
 
 ## Environment setup
 
@@ -90,7 +103,7 @@ These are the files the sections above record their findings in. Together they a
 
 - `README.md`: environment setup, how to run the project, its dependencies, how to build it and run its tests, how to debug it, and where issues are tracked.
 - `CONTRIBUTING.md`: the pipelines a change must pass, the pull request process, branching and commit conventions, the definition of done, and the documentation upkeep rule.
-- `docs/CODING-RULES.md`: project coding rules, naming standards, and conventions. Keep nit-level rules out of this file; anything a linter can enforce belongs in the linter config instead.
+- `docs/CODING-RULES.md`: the naming standards, patterns and conventions a contributor must follow that no linter enforces. Anything a linter can check belongs in the linter config, not here.
 - `docs/ARCHITECTURE.md`: the architecture of the product, its entrypoints, a class diagram of the core domain model, and sequence diagrams of the most important flows.
 - `docs/TESTING.md`: the tests that exist across the pyramid, how to run them, and how to functionally test the product.
 
@@ -123,7 +136,7 @@ Per doc, that means:
 
 - `README.md`: set up the environment, install dependencies, build, run the project, and run the tests, from the top. Check documented versions, environment variables, and dependencies against the lockfiles and config. Trigger a failure mode from the Debugging section and confirm the documented fix resolves it.
 - `CONTRIBUTING.md`: walk the path a change would take. Create a branch using the documented naming and run locally every check the pipeline runs. Then check the documented process against the real pipeline definitions, branch protection rules, required checks, and code owners.
-- `docs/CODING-RULES.md`: check each rule against real files in the codebase. A rule the codebase itself breaks is a caveat to note or a rule to remove.
+- `docs/CODING-RULES.md`: check each rule twice, first for whether it belongs and then for whether it is true. Report as a finding any rule a linter already enforces, any tooling or workflow instruction, and any passage that describes what the code does today rather than telling a contributor what to do. Then check the rules that survive against real files in the codebase. A rule the codebase itself breaks is a caveat to note or a rule to remove.
 - `docs/ARCHITECTURE.md`: read the doc, then check its claims in the source. Trace every component, entrypoint, and diagram element back to real code. Confirm the described responsibilities and interactions are what the code actually does. Names in diagrams must match names in the code.
 - `docs/TESTING.md`: run every documented test command and follow the functional-testing steps end to end. Check the described test layout against the tests that actually exist.
 
