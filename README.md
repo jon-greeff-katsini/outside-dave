@@ -81,8 +81,8 @@ Ask Claude Code to onboard the repo (or make it agent-ready), and it will:
      Anything the linter already checks stays in the linter config.
    - `docs/ARCHITECTURE.md`: the major components, the entrypoints where execution starts, and
      Mermaid diagrams of the core domain model and the most important flows.
-   - `docs/TESTING.md`: the kinds of test the project has, how to run and write them, and how to
-     functionally test the product the way a user would.
+   - `docs/TESTING.md`: where each layer of the testing pyramid lives, the command that runs
+     each, and the bar a change must clear to be complete.
 3. **Wire the docs into `CLAUDE.md` or `AGENTS.md`** as one-line, task-conditioned pointers
    ("Before writing tests: read `docs/TESTING.md`"), so agents load the right doc at the right
    moment without bloating every session.

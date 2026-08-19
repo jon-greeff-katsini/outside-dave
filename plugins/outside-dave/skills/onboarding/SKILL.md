@@ -72,7 +72,7 @@ Determine how a change actually gets from an idea into the main branch, and reco
 - the pull request process: how a change is reviewed, who reviews it, and what is required before it can merge
 - the branching strategy and branch naming conventions
 - commit message conventions
-- the definition of done: what a change must include before it is complete, such as tests, documentation updates, or changelog entries
+- the definition of done: what a change must include before it is complete, such as tests, documentation updates, or changelog entries. Point at the testing bar in `docs/TESTING.md` rather than restating it here.
 
 If the repository has no established convention for one of these, don't invent one silently. Propose one to the user and record what they agree to.
 
@@ -91,17 +91,17 @@ Use Mermaid for the diagrams so they render on the git host. Keep them at a high
 
 ## Testing
 
-Work out how a contributor runs the tests and writes a new one, and record it in `docs/TESTING.md`:
+`docs/TESTING.md` is a map, not a tutorial. It answers two questions: where each layer of the pyramid lives and how to run it, and what verifying a change requires. Keep implementation detail out. How to write a good test is a convention, so it belongs in `docs/CODING-RULES.md`, and how the test framework itself behaves belongs to that framework's own documentation.
 
-- the kinds of test the project has across the pyramid, and the command that runs each
-- how integration tests virtualise external dependencies, and which dependencies that covers
-- how to run one file, one class, or one test, which is the first thing anyone fixing a failure needs
-- where the test for a given piece of code belongs, and the naming the runner relies on to find it
-- the conventions a new test follows, naming the file that best demonstrates them as the one to copy
+For every layer the project has, record where it lives and the command that runs it:
 
-Describe the suite, don't catalogue it. Which tests exist is a question the suite answers correctly on its own.
+- unit tests: the directory or file pattern they sit in, and the command
+- integration tests: the same, plus how they virtualise external dependencies and which dependencies that covers
+- end-to-end tests: the same, plus anything that has to be running first
 
-Understanding how to verify a feature the way a user would matters just as much. A developer would typically also test functionally, so work out how to functionally test the product: how to run it, how to drive the changed behaviour, and what the result should look like.
+Record how to run a single file and a single test as well, which is the first thing anyone fixing a failure needs.
+
+Then state the bar a change has to clear to be complete. Unless the project sets its own, a feature needs a unit test and an end-to-end test that drives the system exactly as a user would. Where a layer does not exist yet, say so in one line and raise it with the user, naming what would have to be built for it to exist.
 
 ## Debugging
 
@@ -122,7 +122,7 @@ These are the files the sections above record their findings in. Together they a
 - `CONTRIBUTING.md`: the pipelines a change must pass, the pull request process, branching and commit conventions, the definition of done, and the documentation upkeep rule.
 - `docs/CODING-RULES.md`: the naming standards, patterns and conventions a contributor must follow that no linter enforces. Anything a linter can check belongs in the linter config, not here.
 - `docs/ARCHITECTURE.md`: the architecture of the product, its entrypoints, a class diagram of the core domain model, and sequence diagrams of the most important flows.
-- `docs/TESTING.md`: the kinds of test the project has, how to run and write them, and how to functionally test the product.
+- `docs/TESTING.md`: where each layer of the testing pyramid lives, the command that runs each, and the bar a change must clear to be complete.
 
 ## Updating agents
 
@@ -156,7 +156,7 @@ Per doc, that means:
 - `CONTRIBUTING.md`: walk the path a change would take. Create a branch using the documented naming and run locally every check the pipeline runs. Then check the documented process against the real pipeline definitions, branch protection rules, required checks, and code owners.
 - `docs/CODING-RULES.md`: check each rule twice, first for whether it belongs and then for whether it is true. Report as a finding any rule a linter already enforces, and any tooling or workflow instruction. Then check the rules that survive against real files in the codebase. A rule the codebase itself breaks is a caveat to note or a rule to remove.
 - `docs/ARCHITECTURE.md`: read the doc, then check its claims in the source. Trace every component, entrypoint, and diagram element back to real code. Confirm the described responsibilities and interactions are what the code actually does. Names in diagrams must match names in the code.
-- `docs/TESTING.md`: run every documented command, the whole-suite and single-test ones alike, and follow the functional-testing steps end to end. Check the documented conventions against the tests that actually exist, and write a small new test by following the doc alone.
+- `docs/TESTING.md`: run every documented command, the whole-suite and single-test ones alike, and confirm each layer sits where the doc says it does. Then take a small change and clear the documented completeness bar with it, writing each test the bar calls for. Report as a finding any passage explaining how to write a test or how the test framework works, since neither belongs here.
 
 Subagents verify and report; they do not fix. Instruct each one to return a structured list of findings: the step or claim that failed, what the doc says, and what is actually true. Every finding comes back to you, the main agent, to resolve:
 
