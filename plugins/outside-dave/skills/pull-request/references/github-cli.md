@@ -1,6 +1,6 @@
 # GitHub CLI & API for Pull Requests
 
-Concrete commands for the operations the SKILL.md refers to. All assume `gh` is authenticated (`gh auth status`) and you're inside the repo checkout. Where an operation isn't covered by a first-class `gh` subcommand, use `gh api` (REST) or `gh api graphql` — both inherit your `gh` auth.
+Concrete commands for the operations the SKILL.md refers to. All assume `gh` is authenticated (`gh auth status`) and you're inside the repo checkout. Where an operation isn't covered by a first-class `gh` subcommand, use `gh api` (REST) or `gh api graphql`. Both inherit your `gh` auth.
 
 ## Table of contents
 - [Finding the PR](#finding-the-pr)
@@ -81,33 +81,38 @@ The thread `id` (a node ID like `PRRT_...`) is what you resolve. The comment `da
 
 ## Posting a review with inline comments
 
-Submit a whole review — inline comments plus a verdict — in one call. Events: `REQUEST_CHANGES`, `APPROVE`, `COMMENT`.
+Submit a whole review, inline comments and all, in one call. `event` is whichever verdict the user asked for: `COMMENT`, `REQUEST_CHANGES`, or `APPROVE`. Ask before posting if they haven't said.
+
+`gh api`'s `-f`/`-F` flags only send flat key/value pairs, so they cannot express the nested `comments` array (`comments[][path]` is silently dropped, and `comments[][body]` collides with the review's own `body`). Send the payload as JSON on stdin instead:
 
 ```bash
-gh api repos/OWNER/REPO/pulls/123/reviews \
-  -f event='REQUEST_CHANGES' \
-  -f body='Overall looks good; a few things to address inline.' \
-  -f 'comments[][path]=src/app.ts' \
-  -F 'comments[][line]=42' \
-  -f 'comments[][body]=This is a bug.
-
-`items` can be empty here, which throws below. Guard it before indexing.
-
-Suggested: `if (!items.length) return;`'
+gh api repos/OWNER/REPO/pulls/123/reviews --input - <<'JSON'
+{
+  "event": "COMMENT",
+  "body": "A few correctness notes inline.",
+  "comments": [
+    {
+      "path": "src/app.ts",
+      "line": 42,
+      "body": "This is a bug.\n\n`items` can be empty here, which throws below. Guard it before indexing.\n\n```suggestion\nif (!items.length) return;\n```"
+    }
+  ]
+}
+JSON
 ```
 
 Notes:
-- `line` is the line number in the file's **new** version of the diff. For a multi-line comment add `comments[][start_line]`. To comment on the old side, add `comments[][side]=LEFT`.
-- Repeat the `comments[][...]` triplet for each inline comment.
-- `-F` sends a raw (numeric/bool) value; `-f` sends a string.
+- `line` is the line number in the file's **new** version of the diff. For a multi-line comment add `start_line`. To comment on the old side, add `"side": "LEFT"`.
+- Add one object to `comments` for each inline comment.
+- Comment bodies are JSON strings, so newlines are `\n`. For a long body, write the JSON to a file with a script and pass `--input file.json`.
 
-To submit a simple approval with no inline comments:
+For a review with no inline comments:
 
 ```bash
-gh pr review 123 --approve --body "LGTM"
-gh pr review 123 --request-changes --body "See comments"
 gh pr review 123 --comment --body "A few thoughts"
 ```
+
+`gh pr review --approve` and `--request-changes` exist too, but only run them when the user asks for that verdict.
 
 ## Code suggestions
 
@@ -129,7 +134,7 @@ Reply threads to an existing review comment via its numeric `databaseId`:
 
 ```bash
 gh api repos/OWNER/REPO/pulls/123/comments/<comment_databaseId>/replies \
-  -f body='Fixed in abc1234 — added the empty-list guard.'
+  -f body='Fixed in abc1234, added the empty-list guard.'
 ```
 
 Link commits with the short SHA (GitHub auto-links it) or a full URL: `https://github.com/OWNER/REPO/commit/<sha>`.
@@ -138,7 +143,7 @@ For conversation-level (non-inline) comments, use `gh pr comment 123 --body '...
 
 ## Resolving a review thread
 
-There's no `gh` subcommand for this — use the GraphQL mutation with the thread node `id` from the reviewThreads query above:
+There's no `gh` subcommand for this. Use the GraphQL mutation with the thread node `id` from the reviewThreads query above:
 
 ```bash
 gh api graphql -f query='

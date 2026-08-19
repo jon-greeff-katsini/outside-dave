@@ -57,7 +57,7 @@ who read the code and could have written it themselves.
 
 ## The skills
 
-The `outside-dave` plugin ships three skills.
+The `outside-dave` plugin ships four skills.
 
 ### Onboarding
 
@@ -125,6 +125,23 @@ sentences, plain words, British spelling, no AI-tells), and adds rules per artef
 only what the code can't show, docstrings are one active-voice sentence, and error messages say what
 went wrong and what to do next.
 
+### Pull requests
+
+Triggers on any pull request work: opening one, reviewing one, or answering the comments on one.
+It's GitHub-specific and drives the `gh` CLI, with the fiddly commands (inline comments,
+suggestion blocks, resolving threads) kept in a reference file it reads when it needs them.
+
+- **Opening a PR** fills in the repository's own template, says what changed and why, adds a
+  Mermaid diagram when the flow isn't obvious, then waits for CI and the review bots instead of
+  declaring victory early.
+- **Reviewing a PR** looks for logical errors and correctness problems: the unhandled failure, the
+  inverted condition, the edge case no test covers. Findings come to you first as a list, and only
+  get posted as inline comments once you approve them. You say whether the review goes up as an
+  approval, a request for changes, or a comment. Judging whether the change is the right change
+  stays with you.
+- **Responding to comments** either makes the change or pushes back with reasoning, replies on the
+  thread either way, and proposes a separate issue for anything out of scope.
+
 ## Installation
 
 In Claude Code:
@@ -144,6 +161,7 @@ The skills trigger on plain language; you don't need to name them.
   the API".
 - **Writing**: any task that produces prose triggers it automatically, from a README rewrite to a
   commit message.
+- **Pull requests**: "open a PR", "review this PR", or "address the comments".
 
 ## Repository layout
 
@@ -154,4 +172,5 @@ plugins/outside-dave/               The plugin
   skills/onboarding/SKILL.md        The onboarding skill
   skills/planning/SKILL.md          The planning skill
   skills/writing/SKILL.md           The writing skill
+  skills/pull-request/SKILL.md      The pull request skill
 ```

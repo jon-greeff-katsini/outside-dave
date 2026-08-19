@@ -23,6 +23,8 @@ Rules for what the communication skill doesn't cover:
 
 **Error messages and UI text.** Say what went wrong in the user's terms and what to do next: "Voucher expired on 12 March. Request a new one from the account page", not "An unexpected error has occurred".
 
+**Review Comments** When posting a comment on a pull request, do not overcomplicate the output and get to the point. Start with a one liner as to the what, provide some teaching as to why, and then suggest the alternate approach. The idea is that a senior can read the one liner, and a junior would want to read the rest.
+
 ## Final check
 
 Run the communication skill's final check, plus one question: does every comment, docstring, and error message earn its place, or is it narrating the obvious?
