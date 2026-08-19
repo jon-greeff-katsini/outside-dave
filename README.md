@@ -24,11 +24,11 @@ What I don't:
 - LLMs are dumb.
 - They aren't deterministic. Give one the same problem three times and you get three different
   solutions.
-- They forget most of what you're working on. Memory tools exist, but those are unreliable too.
-- Most agentic frameworks are bloated. They generate documentation nobody reads and admin nobody
-  asked for.
+- They forget most of what you're working on. Memory tools exist, they help, but they don't solve
+  it.
+- Most agentic frameworks are bloated. They're documentation-heavy or opinionated.
 
-And one thing that isn't up for negotiation either way: I like to read the code.
+And one thing that isn't up for negotiation either way: **I like to read the code.**
 
 Agentic development fails the same way codebases have always failed:
 
@@ -49,12 +49,11 @@ That's the whole test. How you pass it is up to you: self-documenting code, onbo
 diagrams, whatever fits. What matters is that everything a newcomer needs is in the repository and
 not in your head.
 
-Outside Dave is my answer to that. The fix isn't a better prompt. It's a repository where the
-answers exist and are findable, plans that carry their own context, and writing an outsider can
-follow.
+Outside Dave is my answer to that: a repository where the answers exist and can be found, plans
+that carry their own context, and writing an outsider can follow.
 
-**Disclaimer:** you need to be good at your craft. Read the code, understand the code, and be able
-to write it yourself. That's where the best results come from.
+**Disclaimer:** none of this replaces being good at your craft. The best results come from people
+who read the code and could have written it themselves.
 
 ## The skills
 
@@ -71,7 +70,7 @@ the same shot at success the agent gets.
 Ask Claude Code to onboard the repo (or make it agent-ready), and it will:
 
 1. **Survey what exists.** It takes stock of the current README, contributing guide, and docs, and
-   enriches them rather than writing competing versions. A second, conflicting source of truth is
+   builds on them rather than writing competing versions. A second, conflicting source of truth is
    worse than a gap.
 2. **Write the docs an outsider needs**, each in a predictable place:
    - `README.md`: environment setup with exact versions and commands, how to build, run, test, and
@@ -102,35 +101,29 @@ marked as unverified instead of recorded as fact.
 
 Triggers whenever Claude Code enters plan mode or is asked to design an approach. Every plan is
 written so a junior developer, or an agent in a fresh session, could execute it without asking
-questions:
+questions.
 
-- **Grounded in the project's rules.** The plan is drafted after reading `CLAUDE.md`, the coding
-  rules, and the architecture and testing docs (the same docs the onboarding skill produces), and
-  validated against them before it is presented.
-- **YAGNI by default.** The smallest change that fully satisfies the request: no speculative
-  abstractions, no opportunistic refactoring.
-- **Concrete steps and a diagram.** Each step names the exact files it touches, and a small Mermaid
-  diagram shows the components the change affects.
-- **A subagent review phase.** Once implemented, fresh subagents review the diff in parallel, one
-  concern each: requirement fit, project conventions, simplicity, and comment noise. Findings are
-  fixed and re-reviewed until clean.
-- **A verification phase.** Automated tests plus functional testing (actually using the feature),
-  ending with a final subagent audit that checks every part of the plan off against the repo.
-- **Documentation upkeep.** Every plan lists the docs the change invalidates and the update each
-  needs.
+The plan is drafted after reading `CLAUDE.md`, the coding rules, and the architecture and testing
+docs (the same docs the onboarding skill produces), and checked against them before you see it.
+It's YAGNI (you aren't gonna need it) by default: the smallest change that fully satisfies the
+request, no speculative abstractions, no opportunistic refactoring. Each step names the exact
+files it touches, and a small Mermaid diagram shows the components the change affects.
+
+Once implemented, fresh subagents review the diff in parallel, one concern each: requirement fit,
+project conventions, simplicity, and comment noise. Findings are fixed and re-reviewed until
+clean. Then verification: the automated tests run, the feature gets used the way a user would use
+it, and a final subagent audit checks every part of the plan off against the repo. The plan also
+lists the docs the change invalidates and the update each needs.
 
 Then you come in. Read the code, leave comments, and iterate.
 
 ### Writing
 
 Triggers on any task that produces words a human will read: docs, code comments, docstrings, commit
-messages, PR descriptions, error messages. It loads a shared `communication` skill for voice and
-grammar (lead with the point, short sentences, plain words, British spelling, no AI-tells), and adds
-rules per artefact: comments state only what the code can't show, docstrings are one active-voice
-sentence, and error messages say what went wrong and what to do next.
-
-The `communication` skill is a separate dependency. Without it installed, the writing skill still
-applies the same principles on its own.
+messages, PR descriptions, error messages. It sets the voice and grammar (lead with the point, short
+sentences, plain words, British spelling, no AI-tells), and adds rules per artefact: comments state
+only what the code can't show, docstrings are one active-voice sentence, and error messages say what
+went wrong and what to do next.
 
 ## Installation
 
