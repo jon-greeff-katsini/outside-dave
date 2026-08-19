@@ -22,6 +22,17 @@ Before writing anything, take stock of the documentation the repository already 
 
 For each file this skill produces, check whether an equivalent already exists. If it does, enrich it rather than write a competitor. A second, conflicting source of truth is worse than a gap. If an existing doc is stale, correct it as part of this work, and flag anything you cannot verify to the user.
 
+## Write what stays true
+
+These files are read months after they are written, and a doc that misleads is worse than one that is missing. So write what stays true, and leave out what is only true today.
+
+- **Instructions survive, snapshots rot.** "Put each app's tests in its own `tests.py`" still holds next year. "Ten tests in two files" is wrong on the next commit, and the count is exactly the part a reader trusts.
+- **Do not inventory.** Counts, file-by-file catalogues of what each file contains, and lists of what is empty or missing all decay on ordinary commits. Naming the major components of a system is fine, because that shape changes rarely. Naming what sits inside each file is not.
+- **Cite real code as an example of a rule, never in place of one.** The example shows what the rule means; it is not itself the rule.
+- **A gap you find is a finding, not a fact to record.** Where something is missing, broken, or unregistered, raise it with the user and propose the fix. Writing down the way around it makes the workaround permanent.
+
+The exception is the setup facts a reader cannot start without: exact tool versions, commands, and configuration values. Record those precisely rather than vaguely, and treat keeping them current as part of any change that moves them.
+
 ## Standards
 
 Check whether the repository has linting rules. If it has none, flag this to the user and explain why they matter: without them, standards live in people's heads, and neither an outsider nor an agent can follow them.
@@ -33,9 +44,9 @@ What belongs in the file is only what no tool will fail a contributor for: namin
 Two tests before a rule goes in:
 
 - **Could a linter enforce this?** Then it belongs in the linter config. If it should be enforced and isn't, propose the linter rule to the user rather than writing a prose rule nobody runs.
-- **Is it a rule or a description?** "Inherit `ModelBase`" is a rule. "This foreign key cascades because the child is meaningless without its parent" is a fact about today's code, and facts about today's code rot. Write rules, and cite real code as an example of a rule, never in place of one.
+- **Is it a rule or a description?** "Inherit `ModelBase`" is a rule. "This foreign key cascades because the child is meaningless without its parent" is a fact about today's code. Write rules.
 
-Keep tooling and workflow out as well: how to run the formatter, which commands to avoid, how the build behaves. That is `README.md` or `CONTRIBUTING.md`. And where a rule exists only to work around an unfixed problem in the repository, say so and propose the fix instead of making the workaround permanent.
+Keep tooling and workflow out as well: how to run the formatter, which commands to avoid, how the build behaves. That is `README.md` or `CONTRIBUTING.md`.
 
 ## Environment setup
 
@@ -74,17 +85,23 @@ Determine the architecture of the product and record it in `docs/ARCHITECTURE.md
 - a class diagram of the core domain model
 - high-level sequence diagrams for the most important flows in the product
 
+Describe the shape of the system: what each component is responsible for, and where the boundaries between them fall. A walk through the file tree is not architecture, and the first refactor invalidates it.
+
 Use Mermaid for the diagrams so they render on the git host. Keep them at a high level: a diagram of every class is noise, and a sequence diagram of every branch is a flowchart. Diagram the model and flows an outsider must understand to make their first change safely.
 
 ## Testing
 
-- Determine what tests exist across the testing pyramid:
-  - unit tests, and how to run them
-  - integration tests, and how to run them, this should include how to virtualize external dependencies
+Work out how a contributor runs the tests and writes a new one, and record it in `docs/TESTING.md`:
 
-Understanding how to verify a feature the way a user would matters just as much. A developer would typically also test functionally, so work out how to functionally test the product.
+- the kinds of test the project has across the pyramid, and the command that runs each
+- how integration tests virtualise external dependencies, and which dependencies that covers
+- how to run one file, one class, or one test, which is the first thing anyone fixing a failure needs
+- where the test for a given piece of code belongs, and the naming the runner relies on to find it
+- the conventions a new test follows, naming the file that best demonstrates them as the one to copy
 
-Record all of this in `docs/TESTING.md`.
+Describe the suite, don't catalogue it. Which tests exist is a question the suite answers correctly on its own.
+
+Understanding how to verify a feature the way a user would matters just as much. A developer would typically also test functionally, so work out how to functionally test the product: how to run it, how to drive the changed behaviour, and what the result should look like.
 
 ## Debugging
 
@@ -105,7 +122,7 @@ These are the files the sections above record their findings in. Together they a
 - `CONTRIBUTING.md`: the pipelines a change must pass, the pull request process, branching and commit conventions, the definition of done, and the documentation upkeep rule.
 - `docs/CODING-RULES.md`: the naming standards, patterns and conventions a contributor must follow that no linter enforces. Anything a linter can check belongs in the linter config, not here.
 - `docs/ARCHITECTURE.md`: the architecture of the product, its entrypoints, a class diagram of the core domain model, and sequence diagrams of the most important flows.
-- `docs/TESTING.md`: the tests that exist across the pyramid, how to run them, and how to functionally test the product.
+- `docs/TESTING.md`: the kinds of test the project has, how to run and write them, and how to functionally test the product.
 
 ## Updating agents
 
@@ -127,18 +144,19 @@ Adjust paths and conditions to wherever the information lives. Add any other tas
 
 The docs are not done until they have been proven. Verify them with a swarm of subagents, one per doc, launched in parallel. A subagent starts with none of the context you built up writing these docs. That makes it an honest stand-in for the outsider: it can only succeed on what is written down.
 
-Every subagent has the same two jobs for its doc:
+Every subagent has the same three jobs for its doc:
 
 1. **Follow it.** Do what the doc says, using only what is written down. Note every step that fails or turns out to be missing.
 2. **Fact-check it.** Read the doc claim by claim and check each claim against the source: the code, the configuration, the pipeline definitions, and the repository settings. A doc can read perfectly and still be wrong.
+3. **Check it will still be true next month.** Report every passage that is a snapshot of today's code rather than an instruction to a contributor: counts, catalogues of what individual files contain, and notes on what is currently missing or empty.
 
 Per doc, that means:
 
 - `README.md`: set up the environment, install dependencies, build, run the project, and run the tests, from the top. Check documented versions, environment variables, and dependencies against the lockfiles and config. Trigger a failure mode from the Debugging section and confirm the documented fix resolves it.
 - `CONTRIBUTING.md`: walk the path a change would take. Create a branch using the documented naming and run locally every check the pipeline runs. Then check the documented process against the real pipeline definitions, branch protection rules, required checks, and code owners.
-- `docs/CODING-RULES.md`: check each rule twice, first for whether it belongs and then for whether it is true. Report as a finding any rule a linter already enforces, any tooling or workflow instruction, and any passage that describes what the code does today rather than telling a contributor what to do. Then check the rules that survive against real files in the codebase. A rule the codebase itself breaks is a caveat to note or a rule to remove.
+- `docs/CODING-RULES.md`: check each rule twice, first for whether it belongs and then for whether it is true. Report as a finding any rule a linter already enforces, and any tooling or workflow instruction. Then check the rules that survive against real files in the codebase. A rule the codebase itself breaks is a caveat to note or a rule to remove.
 - `docs/ARCHITECTURE.md`: read the doc, then check its claims in the source. Trace every component, entrypoint, and diagram element back to real code. Confirm the described responsibilities and interactions are what the code actually does. Names in diagrams must match names in the code.
-- `docs/TESTING.md`: run every documented test command and follow the functional-testing steps end to end. Check the described test layout against the tests that actually exist.
+- `docs/TESTING.md`: run every documented command, the whole-suite and single-test ones alike, and follow the functional-testing steps end to end. Check the documented conventions against the tests that actually exist, and write a small new test by following the doc alone.
 
 Subagents verify and report; they do not fix. Instruct each one to return a structured list of findings: the step or claim that failed, what the doc says, and what is actually true. Every finding comes back to you, the main agent, to resolve:
 

@@ -60,7 +60,8 @@ not *commence*, *enough* not *sufficient*. Clarity is the whole job.
 
 **Documentation (README, wiki, docs/).** Use headings, lead each section with its point, and write
 for a reader with no context. State each fact once, where a reader would look for it, and link
-rather than duplicate.
+rather than duplicate. Write what stays true: rules and instructions survive, while counts and
+file-by-file catalogues of today's code are wrong by the next commit.
 
 **Code comments.** State only what the code can't show: a constraint, a non-obvious reason, a
 warning. Never narrate the next line or address the reviewer ("fixed the bug here"). Match the

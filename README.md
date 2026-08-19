@@ -77,11 +77,11 @@ Ask Claude Code to onboard the repo (or make it agent-ready), and it will:
      debug the project, and where issues are tracked.
    - `CONTRIBUTING.md`: the pipelines a change must pass, the pull request process, branching and
      commit conventions, and the definition of done.
-   - `docs/CODING-RULES.md`: the coding standards the codebase actually follows, derived from the
-     code and the linting rules.
+   - `docs/CODING-RULES.md`: the standards no linter enforces, worked out from the code itself.
+     Anything the linter already checks stays in the linter config.
    - `docs/ARCHITECTURE.md`: the major components, the entrypoints where execution starts, and
      Mermaid diagrams of the core domain model and the most important flows.
-   - `docs/TESTING.md`: the tests that exist across the pyramid, how to run them, and how to
+   - `docs/TESTING.md`: the kinds of test the project has, how to run and write them, and how to
      functionally test the product the way a user would.
 3. **Wire the docs into `CLAUDE.md` or `AGENTS.md`** as one-line, task-conditioned pointers
    ("Before writing tests: read `docs/TESTING.md`"), so agents load the right doc at the right
