@@ -4,10 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repository is
 
-A Claude Code plugin marketplace. It ships no application code: everything here is markdown that
-gets loaded into another Claude Code session as skill instructions. There is no build, no test
-suite, no linter, and no CI. Verification is reading the prose and, where practical, running a
-skill against a real repository.
+A Claude Code plugin marketplace. Almost everything here is markdown that gets loaded into another
+Claude Code session as skill instructions; the one exception is a small shell hook. There is no
+build, no test suite, no linter, and no CI. Verification is reading the prose and, where practical,
+running a skill against a real repository. A hook is verified by piping a sample event into it, as
+the header comment on each one shows.
 
 Because the deliverable is prose, the repository's own writing is governed by its own `writing`
 skill (`plugins/outside-dave/skills/writing/SKILL.md`). Read it before editing any file here,
@@ -22,11 +23,18 @@ plugins/outside-dave/
   .claude-plugin/plugin.json             Plugin manifest, including the version
   skills/<name>/SKILL.md                 One skill
   skills/<name>/references/*.md          Detail a skill reads only when it needs it
+  hooks/hooks.json                       Hooks the plugin installs, auto-discovered at this path
+  hooks/*.sh                             The scripts those hooks run
 ```
 
 `marketplace.json` points at `./plugins/outside-dave`; the plugin manifest there carries the
 version users install. Adding a plugin means adding a directory under `plugins/` and an entry in
 `marketplace.json`.
+
+`hooks/hooks.json` needs no entry in `plugin.json`: Claude Code discovers it at that path. Hook
+scripts run on the user's machine on someone else's project, so keep them POSIX `sh`, dependency
+free, silent when they have nothing to say, and always exiting 0. Reach for a hook only where a
+skill description can't do the job, because a hook fires whether or not the user wants it.
 
 ## How the skills relate
 

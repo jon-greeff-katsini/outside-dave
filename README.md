@@ -99,15 +99,17 @@ marked as unverified instead of recorded as fact.
 
 ### Planning
 
-Triggers whenever Claude Code enters plan mode or is asked to design an approach. Every plan is
-written so a junior developer, or an agent in a fresh session, could execute it without asking
-questions.
+Triggers whenever Claude Code enters plan mode or is asked to design an approach. Plan mode is
+wired up by a hook the plugin installs, so the skill loads there whether or not Claude thinks to
+reach for it. Every plan is written so a junior developer, or an agent in a fresh session, could
+execute it without asking questions.
 
 The plan is drafted after reading `CLAUDE.md`, the coding rules, and the architecture and testing
 docs (the same docs the onboarding skill produces), and checked against them before you see it.
 It's YAGNI (you aren't gonna need it) by default: the smallest change that fully satisfies the
 request, no speculative abstractions, no opportunistic refactoring. Each step names the exact
-files it touches, and a small Mermaid diagram shows the components the change affects.
+files it touches, and a small ASCII diagram, readable in the terminal, shows the components the
+change affects.
 
 Once implemented, fresh subagents review the diff in parallel, one concern each: requirement fit,
 project conventions, simplicity, and comment noise. Findings are fixed and re-reviewed until

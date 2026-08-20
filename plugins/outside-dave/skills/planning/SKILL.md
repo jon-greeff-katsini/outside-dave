@@ -1,6 +1,6 @@
 ---
 name: planning
-description: "Use whenever entering plan mode or writing an implementation plan: designing how to build a feature, fix a bug, or refactor before touching code. Trigger on any request to plan, design an approach, or propose implementation steps, even if the user never says the word plan. Produces a concise plan with a diagram, a YAGNI check, validation against project rules, a subagent review phase, and a verification phase."
+description: "Use before touching code on any change that needs thinking through, and always on entering plan mode or writing an implementation plan. Trigger on 'plan this', 'how should we build X', 'what is the approach', 'design this feature', 'propose the steps', 'work out how to fix this bug', 'how should we refactor this', and 'do not write code yet', even when the user never says the word plan. Produces a concise plan with an ASCII diagram, a YAGNI check, validation against the project's docs, a subagent review phase, and a verification phase."
 ---
 
 # Planning
@@ -58,11 +58,26 @@ Concrete means real paths, functions, and commands: "add `validateVoucher()` to 
 
 Every plan includes one diagram showing the components the change touches and how they interact:
 
-- a **flowchart** for new or changed logic
-- a **sequence diagram** when the change spans components or services
-- a **class diagram** when the change is mostly the domain model
+- a **flow** of calls or data for new or changed logic
+- a **sequence** across lanes when the change spans components or services
+- a **model** of the types and their relationships when the change is mostly the domain model
 
-Write it as a fenced Mermaid block so it renders wherever the plan lands in markdown. Keep it small (five to ten nodes), name nodes after real files, classes, or services, and mark what is new or changed so the delta is visible at a glance. The diagram's job is to show the change, not the whole system.
+Draw it in ASCII inside a plain fenced block. Plans are read in a terminal, which has no Mermaid renderer: a Mermaid block arrives as its own source, so the reader parses syntax instead of seeing the shape.
+
+Keep it small (five to ten nodes), name nodes after real files, classes, or services, and mark what is new or changed so the delta is visible at a glance. The diagram's job is to show the change, not the whole system.
+
+```
+  POST /checkout
+        |
+        v
+  api/routes/checkout.ts
+        |
+        v
+  vouchers/service.ts       [new] validateVoucher()
+        |
+        v
+  vouchers/repository.ts
+```
 
 ## The review phase
 
