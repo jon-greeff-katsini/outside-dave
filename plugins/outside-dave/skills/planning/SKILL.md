@@ -12,6 +12,7 @@ Write every plan so a junior developer could execute it without asking questions
 Before drafting, read the project's own documentation so the plan follows the house rules, not your defaults:
 
 - `CLAUDE.md` or `AGENTS.md`, and the docs they point to
+- what the product is for and what is out of scope (for example `docs/PRODUCT.md`), along with the decisions already taken, so the plan does not reopen a settled question
 - coding rules and linter configs (for example `docs/CODING-RULES.md`)
 - architecture docs when the change spans components (for example `docs/ARCHITECTURE.md`)
 - testing docs (for example `docs/TESTING.md`), so verification uses the project's real test commands
