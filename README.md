@@ -69,29 +69,37 @@ the same shot at success the agent gets.
 
 Ask Claude Code to onboard the repo (or make it agent-ready), and it will:
 
-1. **Survey what exists.** It takes stock of the current README, contributing guide, and docs, and
+1. **Work out where the project is.** An existing codebase holds its own answers, and the job is to
+   find them. A new one holds none, so the job is to help you decide them and write down what was
+   decided. On a new project it records the choice and the reason, never the design that would
+   follow from it, and it leaves the domain model and the flow diagrams until there is code to
+   diagram.
+2. **Survey what exists.** It takes stock of the current README, contributing guide, and docs, and
    builds on them rather than writing competing versions. A second, conflicting source of truth is
    worse than a gap.
-2. **Write the docs an outsider needs**, each in a predictable place:
+3. **Write the docs an outsider needs**, each in a predictable place:
    - `README.md`: environment setup with exact versions and commands, how to build, run, test, and
      debug the project, and where issues are tracked.
    - `CONTRIBUTING.md`: the pipelines a change must pass, the pull request process, branching and
      commit conventions, and the definition of done.
+   - `docs/PRODUCT.md`: what the product is for, who it serves, what is deliberately out of scope,
+     and the decisions taken so far with the reason for each. Written on a new project, where
+     nothing else answers those questions.
    - `docs/CODING-RULES.md`: the standards no linter enforces, worked out from the code itself.
      Anything the linter already checks stays in the linter config.
    - `docs/ARCHITECTURE.md`: the major components, the entrypoints where execution starts, and
      Mermaid diagrams of the core domain model and the most important flows.
    - `docs/TESTING.md`: where each layer of the testing pyramid lives, the command that runs
      each, and the bar a change must clear to be complete.
-3. **Wire the docs into `CLAUDE.md` or `AGENTS.md`** as one-line, task-conditioned pointers
+4. **Wire the docs into `CLAUDE.md` or `AGENTS.md`** as one-line, task-conditioned pointers
    ("Before writing tests: read `docs/TESTING.md`"), so agents load the right doc at the right
    moment without bloating every session.
-4. **Verify the onboarding works.** It launches a swarm of fresh subagents, one per doc. Each starts
+5. **Verify the onboarding works.** It launches a swarm of fresh subagents, one per doc. Each starts
    with none of the context built up while writing, which makes it an honest stand-in for Dave: it
    can only succeed on what is written down. Each subagent follows its doc step by step and
    fact-checks every claim against the code, the config, and the pipelines. Findings come back, the
    docs get fixed, and re-verification repeats until the swarm comes back clean.
-5. **Keep the docs alive.** It adds a rule to `CONTRIBUTING.md` that updating these docs is part of
+6. **Keep the docs alive.** It adds a rule to `CONTRIBUTING.md` that updating these docs is part of
    any change that invalidates them, not a follow-up.
 
 It interviews you where it can't find an answer, rather than guessing. Anything it can't verify is
@@ -104,8 +112,9 @@ wired up by a hook the plugin installs, so the skill loads there whether or not 
 reach for it. Every plan is written so a junior developer, or an agent in a fresh session, could
 execute it without asking questions.
 
-The plan is drafted after reading `CLAUDE.md`, the coding rules, and the architecture and testing
-docs (the same docs the onboarding skill produces), and checked against them before you see it.
+The plan is drafted after reading `CLAUDE.md`, the product and scope doc, the coding rules, and the
+architecture and testing docs (the same docs the onboarding skill produces), and checked against
+them before you see it.
 It's YAGNI (you aren't gonna need it) by default: the smallest change that fully satisfies the
 request, no speculative abstractions, no opportunistic refactoring. Each step names the exact
 files it touches, and a small ASCII diagram, readable in the terminal, shows the components the
@@ -157,8 +166,8 @@ In Claude Code:
 
 The skills trigger on plain language; you don't need to name them.
 
-- **Onboarding**: "onboard this repo for agentic development", "make this repo agent-ready", or "why
-  do agents struggle in this codebase?"
+- **Onboarding**: "onboard this repo for agentic development", "make this repo agent-ready", "why
+  do agents struggle in this codebase?", or "I'm starting a new project, set it up properly"
 - **Planning**: enter plan mode, or ask for a plan or an approach: "plan how to add rate limiting to
   the API".
 - **Writing**: any task that produces prose triggers it automatically, from a README rewrite to a
