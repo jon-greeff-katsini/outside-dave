@@ -195,6 +195,8 @@ Adjust paths and conditions to wherever the information lives. Add any other tas
 
 The docs are not done until they have been proven. Verify them with a swarm of subagents, one per doc, launched in parallel. A subagent starts with none of the context you built up writing these docs. That makes it an honest stand-in for the outsider: it can only succeed on what is written down.
 
+Run the swarm on Haiku: pass `model: "haiku"` to the Agent tool. Each subagent follows written steps and checks claims against the repository rather than designing anything, and the swarm is a doc per repeat, so the cheap model is what makes running it to clean affordable.
+
 Every subagent has the same three jobs for its doc:
 
 1. **Follow it.** Do what the doc says, using only what is written down. Note every step that fails or turns out to be missing.
@@ -217,7 +219,7 @@ Subagents verify and report; they do not fix. Instruct each one to return a stru
 - If the repository makes the fix clear, fix the doc, not just the immediate problem.
 - If the fix needs a decision or knowledge you cannot verify, interview the user and record their answer. Subagents cannot talk to the user; escalating is your job, not theirs.
 
-After fixing, launch a fresh subagent to re-verify each doc that changed. Repeat until the whole swarm comes back clean.
+After fixing, launch a fresh subagent on the same model to re-verify each doc that changed. Repeat until the whole swarm comes back clean.
 
 If a step cannot be verified, for example because it needs credentials or access you don't have, mark it as unverified in the doc and tell the user. An unverified step that is labelled honestly is fine; a wrong step recorded as fact misleads everyone who follows.
 

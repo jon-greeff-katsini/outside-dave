@@ -242,6 +242,10 @@ Self-checking is unreliable, because you remember what you meant and read it bac
 subagent has none of that context, so it can only judge what is on the page, which is the reader's
 position exactly. Once the draft passes the final check, hand it to one.
 
+Run it on Haiku: pass `model: "haiku"` to the Agent tool. The reviewer checks a draft against a
+written rule set rather than reasoning about a codebase, so a cheap model does it well, and the cost
+is what makes it affordable to run the pass again after every revision.
+
 Give the subagent the draft, the path to this skill file, and the brief the prose has to satisfy.
 Ask for three things:
 
@@ -258,8 +262,8 @@ Every finding quotes the text it is about and names the rule it breaks or the li
 "Feels wordy" is not a finding.
 
 The reviewer reports; it does not rewrite. Resolve each finding yourself, then send the revised
-draft to a fresh subagent, which judges the new draft rather than defending its own suggestions.
-Repeat until it comes back clean.
+draft to a fresh subagent on the same model, which judges the new draft rather than defending its
+own suggestions. Repeat until it comes back clean.
 
 Skip the pass on prose too short to hide a problem: a commit message, a one-line docstring, a single
 error string. A README section, a doc page, a PR description, or a review comment that teaches all
