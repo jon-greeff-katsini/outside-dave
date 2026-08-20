@@ -1,6 +1,6 @@
 ---
 name: writing
-description: "Use whenever writing any non-code prose: documentation, README or wiki pages, code comments, docstrings, descriptions, commit messages, PR descriptions, error messages, or config text. Trigger on any task that produces words a human will read, even when the user never asks for writing help. Carries the voice, grammar, and anti-AI-tell rules, plus rules for code-adjacent writing."
+description: "Use whenever writing any non-code prose: documentation, README or wiki pages, code comments, docstrings, descriptions, commit messages, PR descriptions, error messages, or config text. Trigger on any task that produces words a human will read, even when the user never asks for writing help. Carries the voice, grammar, and anti-AI-tell rules, rules for code-adjacent writing, and a subagent review pass that checks the draft against them and cuts what it doesn't need."
 ---
 
 # Writing
@@ -234,4 +234,33 @@ Reread the draft once as the recipient:
    term and bit of internal shorthand glossed the first time it appears?
 6. Does every comment, docstring, and error message earn its place, or is it narrating the obvious?
 
-Fix what fails, then ship.
+Fix what fails, then hand the draft to the review pass.
+
+## The review pass
+
+Self-checking is unreliable, because you remember what you meant and read it back into the words. A
+subagent has none of that context, so it can only judge what is on the page, which is the reader's
+position exactly. Once the draft passes the final check, hand it to one.
+
+Give the subagent the draft, the path to this skill file, and the brief the prose has to satisfy.
+Ask for three things:
+
+1. **Rule breaches.** Every place the draft breaks a rule here: the AI-tell words and shapes,
+   em-dashes, American spelling, missing Oxford commas, Title Case headings, hype, over-bulleting, a
+   table where prose would do, and the per-artefact rules for whatever this is.
+2. **Over-writing.** Sentences that restate the one before, explanation this audience doesn't need,
+   hedges and qualifiers carrying no meaning, and depth beyond what the topic warrants.
+3. **What to cut.** The specific lines and paragraphs to delete or compress, each with the shorter
+   version written out and a note on what the reader loses. A cut that takes a fact the reader needs
+   is a bad cut, and the reviewer should say so rather than propose it.
+
+Every finding quotes the text it is about and names the rule it breaks or the line it duplicates.
+"Feels wordy" is not a finding.
+
+The reviewer reports; it does not rewrite. Resolve each finding yourself, then send the revised
+draft to a fresh subagent, which judges the new draft rather than defending its own suggestions.
+Repeat until it comes back clean.
+
+Skip the pass on prose too short to hide a problem: a commit message, a one-line docstring, a single
+error string. A README section, a doc page, a PR description, or a review comment that teaches all
+go through it.
