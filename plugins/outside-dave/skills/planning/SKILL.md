@@ -128,14 +128,16 @@ Keep it small (five to ten nodes), name nodes after real files, classes, or serv
 
 Once the change is implemented, review it with subagents launched in parallel. A subagent starts with none of the context built up while writing the code, so it reads the diff the way a reviewer would: it can only judge what is actually there. Each reviewer covers one concern:
 
-- **Requirement fit**: does the change actually do what the requirement asks? Give this reviewer the original requirement and the diff, nothing else.
-- **Project conventions**: does the change follow the project's documented rules? Give this reviewer the coding rules and architecture docs alongside the diff.
-- **Simplicity and YAGNI**: code smells, unnecessary abstractions, speculative flexibility, and anything that could be done more simply.
-- **Comments**: over-commented code. Comments that restate the code, narrate the change, or justify it to a reviewer are noise; only comments that carry constraints the code can't show should survive.
+- **Requirement fit** (`model: "sonnet"`): does the change actually do what the requirement asks? Give this reviewer the original requirement and the diff, nothing else.
+- **Project conventions** (`model: "haiku"`): does the change follow the project's documented rules? Give this reviewer the coding rules and architecture docs alongside the diff.
+- **Simplicity and YAGNI** (`model: "sonnet"`): code smells, unnecessary abstractions, speculative flexibility, and anything that could be done more simply.
+- **Comments** (`model: "haiku"`): over-commented code. Comments that restate the code, narrate the change, or justify it to a reviewer are noise; only comments that carry constraints the code can't show should survive.
+
+Pass the model to the Agent tool. The Haiku reviewers match the diff against something already written down, a documented rule or a comment that either carries a constraint or doesn't, and a checklist is what the cheap model runs reliably. The Sonnet reviewers have no checklist: they judge whether the code means what the requirement asked for, and whether an abstraction earns its keep.
 
 Reviewers report findings; they don't fix. Every finding comes back to the main agent to resolve, and changed code goes back through a fresh review. Repeat until the reviews come back clean.
 
-In the plan itself, this section is one line per reviewer, naming what that reviewer is handed. The briefs above are already in context when the plan runs, so repeating them in the plan is padding.
+In the plan itself, this section is one line per reviewer, naming what that reviewer is handed and which model it runs on. The briefs above are already in context when the plan runs, so repeating them in the plan is padding.
 
 ## The verification phase
 
@@ -146,7 +148,7 @@ Every plan ends with a verification phase covering both kinds of testing:
 
 If a step can't be verified locally (needs credentials, a deployed environment), say so in the plan.
 
-When verification is done, spawn one final subagent to audit the whole plan. Give it the full plan and access to the repo, and have it check every part off: each step done as written, every review finding resolved, both kinds of verification actually run, every listed doc updated. The agent that did the work is the worst judge of whether it's finished; a fresh context can only trust what it can see in the repo. The auditor reports gaps, the main agent closes them, and the work isn't complete until the audit comes back clean.
+When verification is done, spawn one final subagent on Haiku (`model: "haiku"`) to audit the whole plan. Give it the full plan and access to the repo, and have it check every part off: each step done as written, every review finding resolved, both kinds of verification actually run, every listed doc updated. The agent that did the work is the worst judge of whether it's finished; a fresh context can only trust what it can see in the repo. The auditor reports gaps, the main agent closes them, and the work isn't complete until the audit comes back clean.
 
 Write this section as the commands and the steps. The reasoning above is why the phase exists, not something the plan repeats.
 
