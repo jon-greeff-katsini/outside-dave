@@ -24,7 +24,7 @@ In the plan:
 
 Out of the plan:
 
-- code. No function bodies, no CSS rules, no markup, no values copied out of a design or a spec. For a value, the test is where it lives: if it sits in a source the plan points at, point at it, and if it exists nowhere but this plan, write it. A breakpoint read off the design gets pointed at, while `session.set_expiry(0)`, which no source holds, gets written. Same for a line or two that is itself the decision, such as a signature the rest of the plan hangs on.
+- code. No function bodies, no CSS rules, no markup, no values copied out of a design or a spec. For a value, ask whether writing it down records a decision or copies a reference. A breakpoint read off the design is a reference, so point at the design. `session.set_expiry(0)` is the decision itself, that an unticked box ends the session when the browser closes, so write it even though Django's own docs describe the call. If the executor can look the value up once they know the decision, it doesn't belong here. Same for a line or two that is itself the decision, such as a signature the rest of the plan hangs on.
 - anything transcribed from a source the plan has just pointed at. If the executor can read the design file, copying it into the plan only creates a second copy to go stale.
 - restatements of this skill. It is loaded when the plan runs, so the plan needn't explain what the reviewers look for or why a fresh auditor helps.
 
