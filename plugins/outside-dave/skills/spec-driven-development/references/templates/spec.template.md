@@ -12,9 +12,10 @@ hint: Who interacts with this feature and what each one is allowed to do. For ex
 - <actor>
 
 ## Use Cases
-hint: How this feature gets consumed. List every entry point. For example, a browser-linked page, a REST API URL, or a CLI command.
+hint: How this feature gets consumed. List every entry point. For example, a browser-linked page, a REST API URL, or a CLI command. Every entry point must be drivable by an automated test that runs unattended in a pipeline, so say what drives it: a browser, an HTTP request, a command run as a subprocess. An entry point nothing can drive cannot be proved, and the spec is not finished until it can.
 
 - <entry point>
+  - Driven by: <browser page | HTTP request | CLI subprocess>
 
 ## Interfaces & Data
 hint: The contract of each entry point: what it accepts and what it returns. For an API, the request and response shapes and status codes. For a CLI, the arguments, flags, output, and exit codes. For a page, the fields shown and the controls available. Acceptance tests are written against this, so be exact.
@@ -47,7 +48,7 @@ hint: Non-functional requirements this feature must meet: performance, security,
 - <constraint>
 
 ## Dependencies
-hint: Other specs, services, or features this one relies on or changes. Re-read these when this spec changes.
+hint: Other specs, services, or features this one relies on or changes. Re-read these when this spec changes. Include whatever an automated test needs to reach the entry points: test credentials, seed data, a sandbox account, a stubbed third party.
 
 - <dependency>
 

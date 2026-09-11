@@ -97,25 +97,39 @@ Ask Claude Code to onboard the repo (or make it agent-ready), and it will:
 It interviews you where it can't find an answer, rather than guessing. Anything it can't verify is
 marked as unverified instead of recorded as fact.
 
-### Planning
+### Spec driven development
 
-Triggers whenever Claude Code enters plan mode or is asked to design an approach. Every plan is
-written so a junior developer, or an agent in a fresh session, could execute it without asking
-questions.
+Triggers when you describe a feature you want built, or ask for a spec, a design, or an
+implementation plan. The feature goes through four phases, and you approve each one before the next
+begins.
 
-The plan is drafted after reading `CLAUDE.md`, the coding rules, and the architecture and testing
-docs (the same docs the onboarding skill produces), and checked against them before you see it.
-It's YAGNI (you aren't gonna need it) by default: the smallest change that fully satisfies the
-request, no speculative abstractions, no opportunistic refactoring. Each step names the exact
-files it touches, and a small Mermaid diagram shows the components the change affects.
+The **spec** is written by interviewing you, section by section. It describes behaviour from
+outside the system: who uses the feature, where they reach it, what they do, and what they observe.
+Claude proposes defaults drawn from the code and the neighbouring specs, but nothing lands until
+you say yes to it, so every line is something a person chose. Stories and edge cases are numbered
+so tests can name what they prove, and every entry point has to be drivable by an automated test
+that runs unattended in a pipeline. A fresh subagent reviews it for gaps until it comes back clean.
 
-Once implemented, fresh subagents review the diff in parallel, one concern each: requirement fit,
-project conventions, simplicity, and comment noise. Findings are fixed and re-reviewed until
-clean. Then verification: the automated tests run, the feature gets used the way a user would use
-it, and a final subagent audit checks every part of the plan off against the repo. The plan also
-lists the docs the change invalidates and the update each needs.
+The **design** says what shape the code takes: the components, how they relate, how they behave at
+runtime, which files are in scope, and which are deliberately left alone. Shape, never code, so
+signatures rather than bodies. It's reviewed against the spec, and approved only once the two
+agree.
 
-Then you come in. Read the code, leave comments, and iterate.
+The **plan** orders the work into waves. The steps inside a wave share no files and need nothing
+from each other, so each one can be handed to its own subagent. Acceptance tests are named before
+any code is written, and every numbered item in the spec gets a row in a coverage table pointing at
+the test that proves it and the command that runs it.
+
+Then **implementation**. Waves run in order, steps within a wave in parallel. The test run between
+waves is a build gate rather than a review, so nothing stops for approval until the whole spec is
+delivered. A fresh subagent then reviews the change against the spec, the design, and the plan, and
+runs the tests itself instead of trusting a report that they passed. You accept the work last, and
+the plan is deleted: the spec and the design are the record of what was built.
+
+Underneath all of it is one rule. The spec is the truth about behaviour and the design is the truth
+about shape, so neither is ever edited to match what was built. When implementation turns up
+behaviour nobody specified, the work stops and the question goes back to the document that owns it,
+because a gap patched in code is invisible afterwards. Nothing is broken, so nobody looks.
 
 ### Writing
 
@@ -147,8 +161,8 @@ The skills trigger on plain language; you don't need to name them.
 
 - **Onboarding**: "onboard this repo for agentic development", "make this repo agent-ready", or "why
   do agents struggle in this codebase?"
-- **Planning**: enter plan mode, or ask for a plan or an approach: "plan how to add rate limiting to
-  the API".
+- **Spec driven development**: describe a feature you want built, or ask for any phase of it by
+  name: "write a spec for voucher redemption", "design it", "plan the implementation", "build it".
 - **Writing**: any task that produces prose triggers it automatically, from a README rewrite to a
   commit message.
 
@@ -161,6 +175,9 @@ plugins/outside-dave/               The plugin
   .claude-plugin/plugin.json        Plugin manifest
   .codex-plugin/plugin.json         Codex plugin manifest
   skills/onboarding/SKILL.md        The onboarding skill
-  skills/planning/SKILL.md          The planning skill
+  skills/spec-driven-development/   The spec driven development skill
+    SKILL.md                        The workflow, and where each phase is documented
+    references/                     A guide per phase
+    references/templates/           The spec, design, and plan templates
   skills/writing/SKILL.md           The writing skill
 ```

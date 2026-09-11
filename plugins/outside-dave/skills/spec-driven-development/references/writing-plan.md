@@ -6,6 +6,8 @@ Write every plan so a developer in a fresh session could pick it up and execute 
 
 A plan is temporary. The spec and the design outlive the work and describe the system. The plan describes a job, and when the job is done it is deleted. Nothing that needs to survive belongs in it. If you find yourself writing something in the plan that a future reader would need, it belongs in the spec, the design, or the project docs.
 
+Use `templates/plan.template.md` as the starting point. This document explains how to fill it in well.
+
 ## Before you write
 
 Read the spec and the design in full. Both must be approved. If either is a draft, stop. A plan built on a moving design is rewritten as often as the design is.
@@ -16,47 +18,15 @@ Read the coding rules. Steps that break them will be rejected in review.
 
 Follow the repository's convention for where in-progress plans live. If there is none, put them in `plans/` at the repository root, one file per plan, named after the design it implements. Keep them out of `docs/`. A plan is not documentation, and a reader browsing the docs should not find one.
 
-## The shape of a plan
+## Filling in the template
 
-```markdown
-# Plan name
+Set the Spec and Design lines first. Everything in the plan is derived from those two documents, and an executor picking the plan up in a fresh session needs to find them before anything else.
 
-Spec: <path>
-Design: <path>
-Status: <draft | approved | in progress>
-
-## Overview
-One or two sentences: what gets built and in what order.
-
-## Steps
-Steps grouped into waves. Steps in one wave are independent and can run
-in parallel; each wave depends on the one before. Each step names the
-files it touches, what changes in them, the design components involved,
-and the spec items it delivers.
-
-### Wave 1
-1. ...
-2. ...
-
-### Wave 2
-3. ...
-
-## Verification
-The unit tests, the acceptance tests, and the exact commands that run them.
-A table mapping every AC and EC to the test that proves it.
-
-## Documentation
-Every document the change invalidates and the update each one needs.
-
-## Review
-How the finished implementation is checked against the spec, the design,
-and the tests. See below.
-
-## Open Questions
-Decisions not yet made. Each must be resolved before the plan is approved.
-```
+Work through the sections in order. Overview says what the job is. Steps says what gets done and when. Verification says what proves it. Documentation says what the change breaks elsewhere. Review says how the finished work is checked, and Open Questions holds what is still undecided.
 
 Fill every section. Write "None" where a section has nothing in it, so a reader knows it was considered. Documentation is the usual candidate, and it is rarely correct.
+
+Delete each hint once its section is written. A finished plan has no hints in it.
 
 ## Writing steps
 
@@ -92,7 +62,9 @@ Name each test for the number it proves, so the test list reads as a coverage re
 
 Write the acceptance tests in the plan before the implementation steps. They depend on the spec and not on the design, so they can be written early, and running them red first proves they test something. A test that passed before the feature existed proves nothing.
 
-Where an entry point cannot be driven automatically, because it needs credentials or a deployed environment, say so in the plan. Give the exact manual steps and the exact expected result in their place, and mark it so the reviewer knows to check it by hand.
+The spec has already settled how each entry point is driven and what the test needs to reach it. The plan turns that into a real test: the framework, the file, the name, and the command. It runs unattended in the pipeline like the rest of the suite. Credentials and a deployed environment are not a reason to fall back to a manual check, they are dependencies the spec lists and the plan sets up.
+
+The only manual tests in a plan are the ones the spec already marked as impossible to automate and the user already accepted. Carry the spec's manual steps and expected result across, and mark the row so the reviewer knows to check it by hand. If you find yourself writing a manual test the spec did not mark, stop: that is a gap in the spec, not a step in the plan.
 
 ### The coverage table
 
@@ -116,6 +88,8 @@ A plan cannot move from draft to approved while Open Questions has entries.
 
 Work the waves in order. Within a wave, run the steps in parallel, one subagent per step, or in any order if working alone. After each wave, run the commands the plan gives and confirm the code builds and the tests pass before starting the next. Mark each step done in the plan, so a fresh session can see where to resume.
 
+That check between waves is a build gate, not a review. It asks one question, does the suite still pass, and if it does the next wave starts immediately. Nobody reads the diff and nobody is asked to approve anything. Run the plan through to its last step that way. The review comes once, when the whole spec is delivered, because a reviewer looking at a third of a feature cannot tell a gap from work that has not happened yet, and stopping for a person after every step turns a plan an agent could execute unattended into a queue of interruptions.
+
 When a step reveals something the design or spec does not cover, stop. Put the question in the document it belongs to and set that document back to draft. Do not patch around the gap in the code. A patch that works is the hardest kind of deviation to find later, because nothing is broken.
 
 Never change a test to make it pass. If a test is wrong, the spec or the plan is wrong, and the fix goes there first.
@@ -136,7 +110,7 @@ Read the plan back as the developer who has to execute it in a fresh session.
 - Is every section filled, or marked "None" on purpose?
 - Is Open Questions empty, or is the status still draft?
 
-Fix what fails. Then have a subagent with a clean context review the plan for completeness, the same way a spec or design is reviewed: give it the spec, the design, the plan, and this guide, and have it report every question an executor would have to ask. Fix those, repeat with a new subagent until clean, and take the plan to the user for approval before any step is executed.
+Fix what fails. Then have a subagent with a clean context review the plan for completeness, the same way a spec or design is reviewed: give it the spec, the design, the plan, the template, and this guide, and have it report every question an executor would have to ask. Fix those, repeat with a new subagent until clean, and take the plan to the user for approval before any step is executed.
 
 ## Review at the end of implementation
 

@@ -54,6 +54,18 @@ Cover the error paths with the same care as the happy path. For every input, ask
 
 Be exact in Interfaces & Data. Give field names, types, and the values a field may hold. For an API, list the status codes and what triggers each. For a command, list the flags and exit codes. Include one real example per entry point: a full request and response, or a command and its output. An example constrains an implementer more than any description.
 
+## Automated verification
+
+Every entry point in Use Cases must be reachable by an automated test that a pipeline can run unattended. Name what drives it: a browser page driven by the project's browser tool, an HTTP endpoint driven by a request, a command run as a subprocess. If nothing can drive an entry point, the feature cannot be proved and the spec is not finished. Take that back to the user before writing behaviour against it.
+
+Unattended means no human in the loop. No manual sign-in, no clicking through a consent screen, no reading a value off a dashboard, no step that only works on the author's machine. A test that needs a person to start it or judge it will be skipped in the pipeline, and a skipped test reports as a passing build.
+
+The spec names the driver, not the test. "AC-2.1 is proved by driving the voucher form in a browser" belongs in the spec. The framework, the file, and the command belong in the plan. Keeping the two apart means the spec survives a change of test tooling.
+
+Whatever the test needs to reach the entry point is part of the spec: test credentials, seed data, a sandbox account, a stubbed third party. List it in Dependencies. A criterion nobody can set up is a criterion nobody will prove.
+
+Where a criterion genuinely cannot be automated, because it needs a physical device, a real payment, or a third party with no sandbox, say so against that criterion, give the exact manual steps and the expected result, and put it to the user as a cost they are accepting. It is a decision, not a default, and every one of them is a hole in the pipeline.
+
 ## Numbering
 
 Stories are US-1, US-2, and so on. Criteria under a story are AC-1.1, AC-1.2. Edge cases are EC-1, EC-2. Tests name the number they prove, so a reviewer can check coverage by reading the test names.
@@ -83,6 +95,9 @@ Read the spec back as the developer who has to build it, then as the tester who 
 - Could someone build this without asking a question? Every question they would ask is a gap.
 - Is every criterion and edge case an action plus an observable result?
 - Is there a test you could write for every numbered item, through an entry point, without touching internal code?
+- Does every entry point say what drives it automatically, and could that test run in a pipeline with nobody watching?
+- Is everything those tests need to run listed in Dependencies?
+- Is every criterion that cannot be automated marked as such, with manual steps and the user's agreement?
 - Is there any adjective doing the work of a number?
 - Does any sentence describe the code rather than the behaviour?
 - Is every section filled, or marked "None" on purpose?
@@ -98,7 +113,7 @@ The author is the worst judge of whether a spec is complete. You know the featur
 
 Launch a subagent with a clean context to do it. Give it the spec, the template, and this guide. Give it nothing else: no conversation history, no notes, no summary of the feature. If it needs more than the spec to understand the feature, that is the first finding.
 
-The reviewer has one job: completeness. For every section, it asks whether a developer could build from it without a question and whether a tester could prove it without touching internal code. It reports each gap as the question a developer would have had to ask, named against the section where the answer belongs. It does not rewrite the spec and it does not answer the questions itself.
+The reviewer has one job: completeness. For every section, it asks whether a developer could build from it without a question, and whether a tester could prove every numbered item by driving an entry point automatically, unattended, without touching internal code. It reports each gap as the question a developer would have had to ask, named against the section where the answer belongs. It does not rewrite the spec and it does not answer the questions itself.
 
 Every finding comes back to the author. Answer it in the spec, or move it to Open Questions if you cannot. Then send the changed spec to a new subagent, not the one that reviewed it, so the second pass is as fresh as the first. Repeat until a review comes back with nothing to report.
 
