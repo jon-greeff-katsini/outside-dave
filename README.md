@@ -181,4 +181,5 @@ plugins/outside-dave/               The plugin
     references/                     A guide per phase
     references/templates/           The spec, design, and plan templates
   skills/writing/SKILL.md           The writing skill
+  skills/writing/references/        Guidance loaded for the current kind of prose
 ```
