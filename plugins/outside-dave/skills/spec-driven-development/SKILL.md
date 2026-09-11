@@ -1,6 +1,6 @@
 ---
 name: spec-driven-development
-description: "Use when building software through specs, designs and plans rather than straight into code. Trigger whenever the user asks to write or change a spec, design a feature, produce an implementation plan, or implement one, and whenever they describe a new feature or a change in behaviour that no spec covers yet, even if they never say the word spec. Routes to the guide and the template for each phase, and to the rules that keep the code, the spec and the design in agreement."
+description: "Use when building product features through specs, designs and plans rather than straight into code. Trigger when the user asks to write or change a spec, design a feature, produce an implementation plan, implement one, or change shipped product behaviour that no spec covers. Do not create a new spec for repository tooling or maintenance work unless the user explicitly asks for one. Routes to the guide and template for each phase, and to the rules that keep the code, spec and design in agreement."
 ---
 
 # Spec Driven Development
@@ -27,6 +27,8 @@ Two things must exist before any of this is worth starting:
 The onboarding skill produces both, in `docs/CODING-RULES.md` and `docs/ARCHITECTURE.md`. If they are missing, say so and run onboarding first. A design has nothing to stand on without them, and every review that should catch drift has no standard to measure against.
 
 ## The workflow
+
+Repository tooling and maintenance work does not need a new spec merely because it changes code or behaviour inside the repository. Handle changes to development scripts, linters, formatters, CI configuration, agent instructions and similar project infrastructure directly unless the user explicitly asks for a spec, design or plan. If tooling changes shipped product behaviour, use the workflow for that behaviour.
 
 Work out which phase the user is in and read that phase's guide in full before writing anything. The guides carry the detail; this file only routes.
 
