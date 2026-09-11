@@ -16,7 +16,7 @@ Read the code the design will touch. Find the existing components the feature wi
 
 Check whether a design already covers this part of the system. If one does, change it rather than write a competitor.
 
-Follow the repository's convention for where designs live. If there is none, put them in `docs/designs/`, one file per design, named after the spec it implements.
+Write the design to `<repo-root>/docs/specs/<spec-name>/design.md`, beside the specification it implements.
 
 ## Filling in the template
 

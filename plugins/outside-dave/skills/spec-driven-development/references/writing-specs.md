@@ -14,7 +14,7 @@ Read the specs that neighbour this one: anything the feature calls, anything tha
 
 Look at the existing behaviour in the code where the feature touches something that already works. The spec must describe what the system will do after the change, so you need to know what it does now.
 
-Follow the repository's convention for where specs live and how they are named. If there is none, put them in `docs/specs/` as one file per feature, named in kebab-case after the feature.
+Create a kebab-case directory for the feature at `<repo-root>/docs/specs/<spec-name>/`, and write the specification to `spec.md` inside it.
 
 ## Interviewing the user
 

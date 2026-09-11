@@ -66,10 +66,9 @@ Gate: a subagent with a clean context reviews the finished change against the sp
 
 ## Where the documents live
 
-Follow the repository's own convention where it has one. Where it does not:
-
-- `docs/specs/`, one file per feature, kebab-case.
-- `docs/designs/`, one file per design, named after the spec it implements.
+- Create one kebab-case directory per feature at `<repo-root>/docs/specs/<spec-name>/`.
+- Put the behaviour specification at `<repo-root>/docs/specs/<spec-name>/spec.md`.
+- Put its design at `<repo-root>/docs/specs/<spec-name>/design.md`.
 - `plans/` at the repository root, named after the design it implements. Never in `docs/`: a plan is not documentation, and a reader browsing the docs should not find one.
 
 ## When something is not covered
