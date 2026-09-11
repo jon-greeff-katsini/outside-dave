@@ -100,20 +100,8 @@ Read the design back as the developer who has to build it, then as the reviewer 
 - Are all the hints gone?
 - Is Open Questions empty, or is the status still draft?
 
-Fix what fails, then hand the design to a reviewer.
-
-## Review by a fresh reader
-
-The author is the worst judge of whether a design is complete. You have read the spec and the code, so you see connections the document does not draw, and you read structure into diagrams that a stranger would not. The review has to come from someone who knows only what the design and the spec say.
-
-Launch a subagent with a clean context to do it. Give it the design, the spec it implements, the template, this guide, and the architecture and coding rules. Give it nothing else: no conversation history, no notes, no summary of the feature. If it needs more than those documents to understand the design, that is the first finding.
-
-The reviewer has two jobs, both about completeness. First, coverage: it works through every numbered item in the spec and confirms the design shows how it is delivered. Second, buildability: for every section, it asks whether a developer could build in the right shape without a question. It reports each gap as the question a developer would have had to ask, named against the section where the answer belongs. It does not redesign and it does not answer the questions itself.
-
-Every finding comes back to the author. Answer it in the design, or move it to Open Questions if you cannot. If the gap turns out to be in the spec, it goes to the spec's Open Questions and the spec goes back to draft. Then send the changed design to a new subagent, not the one that reviewed it, so the second pass is as fresh as the first. Repeat until a review comes back with nothing to report.
-
-Only then does the design go to the user for approval.
+Fix what fails, then take the design to the user for approval.
 
 ## Approval
 
-A person approves a design. The agent never does, however clean the review came back. Show the user the finished design, tell them the review found nothing, and ask them to approve it. The status moves to approved when they say so and not before. If they ask for changes, make them, run the review again, and come back.
+A person approves a design. The agent never does. Show the user the finished design and ask them to approve it. The status moves to approved when they say so and not before. If they ask for changes, make them and return the revised design for approval.

@@ -108,12 +108,11 @@ outside the system: who uses the feature, where they reach it, what they do, and
 Claude proposes defaults drawn from the code and the neighbouring specs, but nothing lands until
 you say yes to it, so every line is something a person chose. Stories and edge cases are numbered
 so tests can name what they prove, and every entry point has to be drivable by an automated test
-that runs unattended in a pipeline. A fresh subagent reviews it for gaps until it comes back clean.
+that runs unattended in a pipeline.
 
 The **design** says what shape the code takes: the components, how they relate, how they behave at
 runtime, which files are in scope, and which are deliberately left alone. Shape, never code, so
-signatures rather than bodies. It's reviewed against the spec, and approved only once the two
-agree.
+signatures rather than bodies. You approve it once it agrees with the spec.
 
 The **plan** orders the work into waves. The steps inside a wave share no files and need nothing
 from each other, so each one can be handed to its own subagent. Acceptance tests are named before
@@ -121,10 +120,11 @@ any code is written, and every numbered item in the spec gets a row in a coverag
 the test that proves it and the command that runs it.
 
 Then **implementation**. Waves run in order, steps within a wave in parallel. The test run between
-waves is a build gate rather than a review, so nothing stops for approval until the whole spec is
-delivered. A fresh subagent then reviews the change against the spec, the design, and the plan, and
-runs the tests itself instead of trusting a report that they passed. You accept the work last, and
-the plan is deleted: the spec and the design are the record of what was built.
+waves is a build gate, so nothing stops for approval until the whole spec is delivered. You accept
+the work last, and the plan is deleted: the spec and the design are the record of what was built.
+
+Agent reviews are optional. Ask for one at any phase to check a spec for completeness, a design for
+fit, a plan for executable coverage, or an implementation against all three documents.
 
 Underneath all of it is one rule. The spec is the truth about behaviour and the design is the truth
 about shape, so neither is ever edited to match what was built. When implementation turns up

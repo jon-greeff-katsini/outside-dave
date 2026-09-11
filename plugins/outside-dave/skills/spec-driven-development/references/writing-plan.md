@@ -22,7 +22,7 @@ Follow the repository's convention for where in-progress plans live. If there is
 
 Set the Spec and Design lines first. Everything in the plan is derived from those two documents, and an executor picking the plan up in a fresh session needs to find them before anything else.
 
-Work through the sections in order. Overview says what the job is. Steps says what gets done and when. Verification says what proves it. Documentation says what the change breaks elsewhere. Review says how the finished work is checked, and Open Questions holds what is still undecided.
+Work through the sections in order. Overview says what the job is. Steps says what gets done and when. Verification says what proves it. Documentation says what the change breaks elsewhere, and Open Questions holds what is still undecided.
 
 Fill every section. Write "None" where a section has nothing in it, so a reader knows it was considered. Documentation is the usual candidate, and it is rarely correct.
 
@@ -88,7 +88,7 @@ A plan cannot move from draft to approved while Open Questions has entries.
 
 Work the waves in order. Within a wave, run the steps in parallel, one subagent per step, or in any order if working alone. After each wave, run the commands the plan gives and confirm the code builds and the tests pass before starting the next. Mark each step done in the plan, so a fresh session can see where to resume.
 
-That check between waves is a build gate, not a review. It asks one question, does the suite still pass, and if it does the next wave starts immediately. Nobody reads the diff and nobody is asked to approve anything. Run the plan through to its last step that way. The review comes once, when the whole spec is delivered, because a reviewer looking at a third of a feature cannot tell a gap from work that has not happened yet, and stopping for a person after every step turns a plan an agent could execute unattended into a queue of interruptions.
+That check between waves is a build gate. It asks one question, does the suite still pass, and if it does the next wave starts immediately. Nobody is asked to approve anything between waves. Run the plan through to its last step that way.
 
 When a step reveals something the design or spec does not cover, stop. Put the question in the document it belongs to and set that document back to draft. Do not patch around the gap in the code. A patch that works is the hardest kind of deviation to find later, because nothing is broken.
 
@@ -110,34 +110,10 @@ Read the plan back as the developer who has to execute it in a fresh session.
 - Is every section filled, or marked "None" on purpose?
 - Is Open Questions empty, or is the status still draft?
 
-Fix what fails. Then have a subagent with a clean context review the plan for completeness, the same way a spec or design is reviewed: give it the spec, the design, the plan, the template, and this guide, and have it report every question an executor would have to ask. Fix those, repeat with a new subagent until clean, and take the plan to the user for approval before any step is executed.
-
-## Review at the end of implementation
-
-When every step is done and every test passes, the work is reviewed against the documents that defined it. The agent that did the work is the worst judge of whether it is finished. It remembers what it meant to build and reads that into the code.
-
-Launch a subagent with a clean context. Give it the spec, the design, the plan, this guide, and access to the repository with the change in place. Give it nothing else: no conversation history and no summary of the work. It reads the diff the way a stranger would, and it runs the tests itself rather than trusting a report that they passed.
-
-The reviewer has three jobs.
-
-**Fit to the spec.** For every numbered item in the spec, the reviewer finds the code that delivers it and the test that proves it. Anything the spec requires and the code does not do is a finding. Anything the code does that the spec does not require is also a finding.
-
-**Fit to the design.** The components exist with the names the design gave them. The signatures match the class diagram. The calls happen in the order the sequence diagrams show. Every changed file is in the design's Files in Scope, and nothing in Boundaries was touched. A shape that works but differs from the design is a finding, because the design is now wrong and someone has to decide which one changes.
-
-**The tests are real.** This is where the reviewer spends most of its time. A test that passes for the wrong reason is worse than no test, because it says the work is done when it is not. For every row in the coverage table, the reviewer checks that the test:
-
-- exists, and is named for the item it proves
-- drives the entry point the spec names, not internal code
-- performs the action the criterion describes
-- asserts the observable result the criterion states, not a substitute for it
-- can fail: the reviewer disables the behaviour under test, or reasons carefully about what would, and confirms the test goes red
-
-It also looks for the usual ways a test lies: asserting that a mock returned what it was told to return, tests skipped or marked pending, assertions loosened until they pass, and tests that claim to cover an error path and never trigger it. For the unit tests, it checks that each design component has tests covering its invalid inputs and boundaries as well as its happy path.
-
-The reviewer reports findings. It does not fix. Every finding comes back to the implementer, who fixes the code, or takes a gap back to the spec or design, and sends the change to a new subagent. Repeat until a review comes back with nothing to report.
+Fix what fails, then take the plan to the user for approval before executing it.
 
 ## Approval
 
-A person closes the work. When the review is clean, show the user the finished change, the test results, and the review's report, and ask them to accept it. The spec and design move to implemented when the user says so and not before. If they ask for changes, make them, run the review again, and come back.
+A person closes the work. When every step is done and the tests pass, show the user the finished change and test results, then ask them to accept it. The spec and design move to implemented when the user says so and not before. If they ask for changes, make them, rerun the relevant tests and return the result for acceptance.
 
 When the user accepts, delete the plan. Check first that nothing in it needs to survive: a decision that should have gone in the design, a manual test step that belongs in the testing docs, a command the README should carry. Move those, then remove the file. The spec and the design are the record of what was built. The plan was the record of building it, and that job is over.

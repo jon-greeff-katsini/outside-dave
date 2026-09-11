@@ -10,7 +10,8 @@
         "Invokes the spec-driven workflow and starts with the specification phase rather than implementation.",
         "Reads only the spec-writing guide and spec template for this phase.",
         "Creates or proposes docs/specs/invoice-export/spec.md.",
-        "Gets the user's decisions before treating proposed defaults as approved."
+        "Gets the user's decisions before treating proposed defaults as approved.",
+        "Does not launch an agent review unless the user asks for one."
       ]
     },
     {
@@ -69,22 +70,37 @@
     {
       "id": 7,
       "prompt": "The spec, design and plan are approved. Execute the plan.",
-      "expected_output": "Loads only the relevant plan-guide sections, executes gated waves and waits for user acceptance before final status changes.",
+      "expected_output": "Loads only the execution section of the plan guide, executes gated waves and waits for user acceptance before final status changes.",
       "files": [],
       "expectations": [
-        "Loads only the execution and final-review sections of the plan guide, not every phase guide and template.",
+        "Loads only the execution section of the plan guide, not every phase guide and template.",
         "Executes waves in order and uses tests as the gate between waves.",
-        "Gets user acceptance before marking the spec and design implemented or deleting the plan."
+        "Gets user acceptance before marking the spec and design implemented or deleting the plan.",
+        "Does not launch an agent review unless the user asks for one."
       ]
     },
     {
       "id": 8,
       "prompt": "Change invoice exports to include the customer's tax number. The behaviour is already covered by docs/specs/invoice-export/spec.md.",
-      "expected_output": "Updates the existing specification, returns it to draft and follows its review and approval gate.",
+      "expected_output": "Updates the existing specification, returns it to draft and follows its user approval gate.",
       "files": [],
       "expectations": [
         "Updates the existing specification instead of creating a competing spec.",
-        "Returns the changed approved specification to draft and follows the specification approval gate."
+        "Returns the changed approved specification to draft and follows the specification approval gate.",
+        "Does not launch an agent review unless the user asks for one."
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Have another agent review the approved design at docs/specs/invoice-export/design.md before I plan it.",
+      "expected_output": "Loads the optional review guide and asks a fresh-context agent to review design coverage and buildability against its authoritative inputs.",
+      "files": [],
+      "expectations": [
+        "Treats the explicit request as authority to launch an agent review.",
+        "Reads references/reviewing.md and uses its design checklist.",
+        "Provides the reviewer with the specification, design, template, architecture rules and coding rules.",
+        "Asks for findings with evidence rather than automatic fixes.",
+        "Does not make the review a permanent phase gate or start repeated review cycles."
       ]
     }
   ]

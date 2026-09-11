@@ -61,11 +61,6 @@ hint: Every document this change invalidates and the update each one needs: READ
 
 - <document>: <update needed>
 
-## Review
-hint: When every step is done and every test passes, a subagent with a clean context reviews the change against the spec, the design, and this plan. Name here anything the reviewer needs that those documents do not carry: an environment to run in, credentials, a manual check. Write "None" if there is nothing.
-
-- <what the reviewer needs>
-
 ## Open Questions
 hint: Decisions not yet made. If the question is about behaviour it belongs in the spec, and if it is about shape it belongs in the design: move it there, set that document back to draft, and stop. This plan cannot move from draft to approved while this section has entries.
 

@@ -5,7 +5,7 @@ description: "Build product features through approved specs, designs and impleme
 
 # Spec-driven development
 
-Build features in four approved phases: behaviour specification, technical design, implementation plan, then implementation and review. Write each artefact for a developer with no prior context.
+Build features in four approved phases: behaviour specification, technical design, implementation plan, then implementation. Write each artefact for a developer with no prior context.
 
 ## Scope
 
@@ -32,12 +32,16 @@ Read only the references for the active phase, in full.
 
 | Phase | Read | Start when | Finish when |
 | --- | --- | --- | --- |
-| Spec | `references/writing-specs.md` and `references/templates/spec.template.md` | Behaviour needs a new or changed spec | A fresh-context review is clean and the user approves |
-| Design | `references/writing-designs.md` and `references/templates/design.template.md` | The spec is approved | A fresh-context review against the spec is clean and the user approves |
-| Plan | `references/writing-plan.md` and `references/templates/plan.template.md` | The spec and design are approved | A fresh-context review is clean and the user approves |
-| Implementation | The `Executing the plan` and `Review at the end of implementation` sections of `references/writing-plan.md` | The plan is approved | Tests and fresh-context review pass, the user accepts, and the plan is deleted |
+| Spec | `references/writing-specs.md` and `references/templates/spec.template.md` | Behaviour needs a new or changed spec | The user approves |
+| Design | `references/writing-designs.md` and `references/templates/design.template.md` | The spec is approved | The user approves |
+| Plan | `references/writing-plan.md` and `references/templates/plan.template.md` | The spec and design are approved | The user approves |
+| Implementation | The `Executing the plan` section of `references/writing-plan.md` | The plan is approved | Tests pass, the user accepts, and the plan is deleted |
 
 Do not load guides or templates for later phases in advance.
+
+## Optional agent reviews
+
+Do not run an agent review automatically or make it a phase gate. When the user explicitly asks for an agent to review a spec, design, plan or implementation, read `references/reviewing.md` and follow the checklist for that artefact.
 
 ## Document locations
 

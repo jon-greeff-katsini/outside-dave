@@ -105,20 +105,8 @@ Read the spec back as the developer who has to build it, then as the tester who 
 - Did the user decide every section, or did a default go in without their yes?
 - Is Open Questions empty, or is the status still draft?
 
-Fix what fails, then hand the spec to a reviewer.
-
-## Review by a fresh reader
-
-The author is the worst judge of whether a spec is complete. You know the feature, so you read what you meant rather than what is on the page, and your memory fills gaps the text does not. The review has to come from someone who knows nothing but what the spec says.
-
-Launch a subagent with a clean context to do it. Give it the spec, the template, and this guide. Give it nothing else: no conversation history, no notes, no summary of the feature. If it needs more than the spec to understand the feature, that is the first finding.
-
-The reviewer has one job: completeness. For every section, it asks whether a developer could build from it without a question, and whether a tester could prove every numbered item by driving an entry point automatically, unattended, without touching internal code. It reports each gap as the question a developer would have had to ask, named against the section where the answer belongs. It does not rewrite the spec and it does not answer the questions itself.
-
-Every finding comes back to the author. Answer it in the spec, or move it to Open Questions if you cannot. Then send the changed spec to a new subagent, not the one that reviewed it, so the second pass is as fresh as the first. Repeat until a review comes back with nothing to report.
-
-Only then does the spec go to the user for approval.
+Fix what fails, then take the spec to the user for approval.
 
 ## Approval
 
-A person approves a spec. The agent never does, however clean the review came back. Show the user the finished spec, tell them the review found nothing, and ask them to approve it. The status moves to approved when they say so and not before. If they ask for changes, make them, run the review again, and come back.
+A person approves a spec. The agent never does. Show the user the finished spec and ask them to approve it. The status moves to approved when they say so and not before. If they ask for changes, make them and return the revised spec for approval.
