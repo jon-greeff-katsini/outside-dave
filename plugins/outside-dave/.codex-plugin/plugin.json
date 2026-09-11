@@ -1,0 +1,29 @@
+{
+  "name": "outside-dave",
+  "version": "0.5.0",
+  "description": "Agentic development workflow for repository onboarding and spec-driven delivery.",
+  "author": {
+    "name": "Jon Myburgh",
+    "email": "jon@greeff-katsini.co.za",
+    "url": "https://github.com/jon-greeff-katsini"
+  },
+  "homepage": "https://github.com/jon-greeff-katsini/outside-dave",
+  "repository": "https://github.com/jon-greeff-katsini/outside-dave",
+  "keywords": ["agentic-development", "onboarding", "spec-driven-development", "writing"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Outside Dave",
+    "shortDescription": "Make repositories legible to people and agents.",
+    "longDescription": "Onboard repositories, guide spec-driven delivery, and write clear prose that an outside developer can follow.",
+    "developerName": "Jon Myburgh",
+    "category": "Developer Tools",
+    "capabilities": ["Repository onboarding", "Spec-driven development", "Technical writing"],
+    "websiteURL": "https://github.com/jon-greeff-katsini/outside-dave",
+    "defaultPrompt": [
+      "Onboard this repository for agentic development.",
+      "Write a spec for the feature I describe.",
+      "Make this documentation clear to an outside developer."
+    ],
+    "brandColor": "#38755B"
+  }
+}

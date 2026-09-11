@@ -1,7 +1,7 @@
 # Outside Dave
 
-Outside Dave is a [Claude Code](https://claude.com/claude-code) plugin marketplace for the way I
-actually want to work with agents.
+Outside Dave is a Codex and [Claude Code](https://claude.com/claude-code) plugin marketplace for the
+way I actually want to work with agents.
 
 Picture Dave. He's outside your team and he's never seen your codebase. Can he start contributing
 today without asking you a single question? If the answer is no, your AI is going to struggle for
@@ -127,6 +127,13 @@ went wrong and what to do next.
 
 ## Installation
 
+In Codex, add this repository as a marketplace and install the plugin:
+
+```
+codex plugin marketplace add https://github.com/jon-greeff-katsini/outside-dave
+codex plugin add outside-dave@outside-dave
+```
+
 In Claude Code:
 
 ```
@@ -149,8 +156,10 @@ The skills trigger on plain language; you don't need to name them.
 
 ```
 .claude-plugin/marketplace.json     Marketplace manifest
+.agents/plugins/marketplace.json    Codex marketplace manifest
 plugins/outside-dave/               The plugin
   .claude-plugin/plugin.json        Plugin manifest
+  .codex-plugin/plugin.json         Codex plugin manifest
   skills/onboarding/SKILL.md        The onboarding skill
   skills/planning/SKILL.md          The planning skill
   skills/writing/SKILL.md           The writing skill
