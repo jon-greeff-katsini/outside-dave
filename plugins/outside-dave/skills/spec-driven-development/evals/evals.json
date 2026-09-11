@@ -1,0 +1,91 @@
+{
+  "skill_name": "spec-driven-development",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add a customer-facing feature that lets signed-in users export their invoices as CSV. There is no existing spec for exports.",
+      "expected_output": "Starts the spec phase, loads only its two references and drafts docs/specs/invoice-export/spec.md through a user interview.",
+      "files": [],
+      "expectations": [
+        "Invokes the spec-driven workflow and starts with the specification phase rather than implementation.",
+        "Reads only the spec-writing guide and spec template for this phase.",
+        "Creates or proposes docs/specs/invoice-export/spec.md.",
+        "Gets the user's decisions before treating proposed defaults as approved."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Update our lint script to fail when generated files are committed.",
+      "expected_output": "Handles the repository-tooling change directly without starting a product specification.",
+      "files": [],
+      "expectations": [
+        "Treats this as repository tooling and does not start a new product spec.",
+        "Handles the requested tooling change directly unless it affects shipped product behaviour."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write a spec for changing our CI release job so it signs build artefacts.",
+      "expected_output": "Honours the explicit spec request and drafts a correctly located specification despite the tooling scope.",
+      "files": [],
+      "expectations": [
+        "Uses the specification phase because the user explicitly requested a spec despite the work being repository tooling.",
+        "Places the draft at docs/specs/signed-build-artifacts/spec.md or an equivalently accurate kebab-case name."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Create the design for docs/specs/invoice-export/spec.md. Its status is draft.",
+      "expected_output": "Stops before design and asks for approval of the draft specification.",
+      "files": [],
+      "expectations": [
+        "Does not create the design while the specification is draft.",
+        "Explains that the specification must be approved first.",
+        "Does not load the plan or implementation guidance."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "The approved invoice-export spec is at docs/specs/invoice-export/spec.md. Design it.",
+      "expected_output": "Loads only the design references and creates docs/specs/invoice-export/design.md.",
+      "files": [],
+      "expectations": [
+        "Reads the design guide and design template.",
+        "Writes or proposes docs/specs/invoice-export/design.md.",
+        "Does not use a separate docs/designs directory."
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Implement the approved plan. During implementation you discover the spec does not say whether expired accounts may export invoices.",
+      "expected_output": "Stops implementation, returns the specification to draft and asks the user to decide the missing behaviour.",
+      "files": [],
+      "expectations": [
+        "Stops implementation instead of guessing.",
+        "Adds or proposes the behaviour question in the specification and returns it to draft.",
+        "Waits for human approval before resuming."
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "The spec, design and plan are approved. Execute the plan.",
+      "expected_output": "Loads only the relevant plan-guide sections, executes gated waves and waits for user acceptance before final status changes.",
+      "files": [],
+      "expectations": [
+        "Loads only the execution and final-review sections of the plan guide, not every phase guide and template.",
+        "Executes waves in order and uses tests as the gate between waves.",
+        "Gets user acceptance before marking the spec and design implemented or deleting the plan."
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Change invoice exports to include the customer's tax number. The behaviour is already covered by docs/specs/invoice-export/spec.md.",
+      "expected_output": "Updates the existing specification, returns it to draft and follows its review and approval gate.",
+      "files": [],
+      "expectations": [
+        "Updates the existing specification instead of creating a competing spec.",
+        "Returns the changed approved specification to draft and follows the specification approval gate."
+      ]
+    }
+  ]
+}

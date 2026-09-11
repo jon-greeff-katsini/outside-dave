@@ -177,6 +177,7 @@ plugins/outside-dave/               The plugin
   skills/onboarding/SKILL.md        The onboarding skill
   skills/spec-driven-development/   The spec driven development skill
     SKILL.md                        The workflow, and where each phase is documented
+    evals/evals.json                Behavioural regression cases for routing and phase gates
     references/                     A guide per phase
     references/templates/           The spec, design, and plan templates
   skills/writing/SKILL.md           The writing skill
